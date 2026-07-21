@@ -53,10 +53,14 @@ function normalizeError(error: AxiosError<ApiErrorResponse>): NormalizedApiError
   const body = error.response?.data;
 
   if (!error.response) {
+    const isTimeout = error.code === 'ECONNABORTED' && /timeout/i.test(error.message);
+
     return {
-      message: error.message || 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+      message: isTimeout
+        ? 'Permintaan waktu habis (timeout). Periksa koneksi internet Anda dan coba lagi.'
+        : 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
       status: null,
-      errorCode: null,
+      errorCode: isTimeout ? 'TIMEOUT' : null,
       errors: null,
       isNetworkError: true,
     };

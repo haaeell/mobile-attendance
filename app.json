@@ -28,12 +28,27 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#028847",
+          "image": "./assets/images/splashscreen.png",
+          "resizeMode": "cover"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Aplikasi memerlukan akses kamera untuk memindai barcode absensi."
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      "expo-document-picker",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Aplikasi memerlukan akses galeri foto untuk melampirkan surat sakit."
+        }
+      ],
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true,

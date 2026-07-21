@@ -5,7 +5,7 @@
 
 export const Colors = {
   light: {
-    primary: '#208AEF',
+    primary: '#02783F',
     success: '#16A34A',
     warning: '#D97706',
     danger: '#DC2626',
@@ -16,7 +16,7 @@ export const Colors = {
     border: '#E2E4E9',
   },
   dark: {
-    primary: '#4DA3F5',
+    primary: '#34C77D',
     success: '#22C55E',
     warning: '#F59E0B',
     danger: '#F87171',
@@ -43,5 +43,18 @@ export const Radius = {
   sm: 6,
   md: 10,
   lg: 16,
+  xl: 22,
   full: 999,
+} as const;
+
+/**
+ * Shadow tipis konsisten untuk kartu (iOS: shadow*, Android: elevation).
+ * Dipakai bersama `theme.surface`/`theme.background` sebagai backgroundColor.
+ */
+export const CardShadow = {
+  shadowColor: '#000000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.06,
+  shadowRadius: 8,
+  elevation: 2,
 } as const;
