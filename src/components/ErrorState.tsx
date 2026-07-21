@@ -1,3 +1,4 @@
+import { RefreshCw } from 'lucide-react-native';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '@/components/AppButton';
@@ -23,7 +24,7 @@ export function ErrorState({
       <Text style={[styles.message, { color: theme.textSecondary }]}>{message}</Text>
       {onRetry ? (
         <View style={styles.action}>
-          <AppButton title="Coba Lagi" onPress={onRetry} />
+          <AppButton title="Coba Lagi" icon={RefreshCw} onPress={onRetry} />
         </View>
       ) : null}
     </View>

@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { CircleCheck, Pencil, Plus, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -94,7 +95,8 @@ export default function AdminAttendanceSettingsListScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <AppButton
-              title="+ Tambah Jadwal"
+              title="Tambah Jadwal"
+              icon={Plus}
               onPress={() =>
                 router.push({ pathname: '/(app)/admin/attendance-settings/create', params: { subjectType } })
               }
@@ -134,6 +136,7 @@ export default function AdminAttendanceSettingsListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Edit"
+                  icon={Pencil}
                   variant="secondary"
                   onPress={() => router.push(`/(app)/admin/attendance-settings/edit/${item.id}`)}
                 />
@@ -142,6 +145,7 @@ export default function AdminAttendanceSettingsListScreen() {
                 <View style={styles.actionButton}>
                   <AppButton
                     title="Aktifkan"
+                    icon={CircleCheck}
                     variant="secondary"
                     onPress={() => handleActivate(item)}
                     loading={activateMutation.isPending}
@@ -151,6 +155,7 @@ export default function AdminAttendanceSettingsListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Hapus"
+                  icon={Trash2}
                   variant="danger"
                   onPress={() => handleDelete(item)}
                   loading={deleteMutation.isPending}

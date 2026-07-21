@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react-native';
 import { forwardRef, type ReactNode } from 'react';
 import { StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 
@@ -7,12 +8,14 @@ import { useTheme } from '@/hooks/use-theme';
 export interface AppInputProps extends TextInputProps {
   label?: string;
   error?: string;
+  /** Ikon di sisi kiri input (lucide-react-native), murni visual. */
+  icon?: LucideIcon;
   /** Elemen opsional di sisi kanan input, mis. tombol show/hide password. */
   rightElement?: ReactNode;
 }
 
 export const AppInput = forwardRef<TextInput, AppInputProps>(function AppInput(
-  { label, error, rightElement, style, ...textInputProps },
+  { label, error, icon: Icon, rightElement, style, ...textInputProps },
   ref,
 ) {
   const theme = useTheme();
@@ -28,10 +31,15 @@ export const AppInput = forwardRef<TextInput, AppInputProps>(function AppInput(
             backgroundColor: theme.surface,
           },
         ]}>
+        {Icon ? (
+          <View style={styles.leftIcon}>
+            <Icon size={18} color={theme.textSecondary} />
+          </View>
+        ) : null}
         <TextInput
           ref={ref}
           placeholderTextColor={theme.textSecondary}
-          style={[styles.input, { color: theme.textPrimary }, style]}
+          style={[styles.input, { color: theme.textPrimary }, !Icon && styles.inputNoIcon, style]}
           {...textInputProps}
         />
         {rightElement}
@@ -57,11 +65,17 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     paddingRight: Spacing.sm,
   },
+  leftIcon: {
+    paddingLeft: Spacing.md,
+  },
   input: {
     flex: 1,
     minHeight: 48,
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.sm,
     fontSize: 16,
+  },
+  inputNoIcon: {
+    paddingLeft: Spacing.md,
   },
   error: {
     fontSize: 13,

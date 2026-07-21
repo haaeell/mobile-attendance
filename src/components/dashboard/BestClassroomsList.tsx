@@ -22,7 +22,9 @@ export function BestClassroomsList({ classrooms }: BestClassroomsListProps) {
   return (
     <View style={styles.list}>
       {classrooms.map((classroom, index) => (
-        <View key={classroom.id} style={[styles.item, CardShadow, { backgroundColor: theme.surface }]}>
+        <View
+          key={classroom.id}
+          style={[styles.item, CardShadow, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <View style={[styles.rank, { backgroundColor: MEDAL_COLORS[index] ?? theme.primary }]}>
             <Text style={styles.rankText}>{index + 1}</Text>
           </View>
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: Spacing.sm,

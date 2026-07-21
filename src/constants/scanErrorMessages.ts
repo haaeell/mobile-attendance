@@ -3,9 +3,9 @@
  * Bahasa Indonesia yang ramah pengguna untuk ditampilkan di layar scan.
  */
 export const SCAN_ERROR_MESSAGES: Record<string, string> = {
-  INVALID_BARCODE: 'Barcode tidak ditemukan. Pastikan kartu/barcode valid.',
-  INACTIVE_BARCODE: 'Barcode ini sudah tidak aktif. Hubungi admin.',
-  INACTIVE_SUBJECT: 'Pemilik barcode ini sedang tidak aktif.',
+  INVALID_BARCODE: 'QR code tidak ditemukan. Pastikan kartu/QR code valid.',
+  INACTIVE_BARCODE: 'QR code ini sudah tidak aktif. Hubungi admin.',
+  INACTIVE_SUBJECT: 'Pemilik QR code ini sedang tidak aktif.',
   HOLIDAY: 'Hari ini hari libur, absensi tidak diperlukan.',
   SCHEDULE_NOT_CONFIGURED: 'Jadwal absensi belum diatur untuk hari ini.',
   TOO_EARLY: 'Belum waktunya absen masuk.',

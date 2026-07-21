@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react-native';
 import { ActivityIndicator, Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
 
 import { Radius, Spacing } from '@/constants/theme';
@@ -9,6 +10,8 @@ export interface AppButtonProps extends Omit<PressableProps, 'style'> {
   title: string;
   variant?: AppButtonVariant;
   loading?: boolean;
+  /** Ikon di depan label (lucide-react-native), murni visual. */
+  icon?: LucideIcon;
 }
 
 export function AppButton({
@@ -16,6 +19,7 @@ export function AppButton({
   variant = 'primary',
   loading = false,
   disabled,
+  icon: Icon,
   ...pressableProps
 }: AppButtonProps) {
   const theme = useTheme();
@@ -47,7 +51,10 @@ export function AppButton({
       {loading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Text style={[styles.text, { color: textColor }]}>{title}</Text>
+        <>
+          {Icon ? <Icon size={18} color={textColor} style={styles.icon} /> : null}
+          <Text style={[styles.text, { color: textColor }]}>{title}</Text>
+        </>
       )}
     </Pressable>
   );
@@ -55,11 +62,15 @@ export function AppButton({
 
 const styles = StyleSheet.create({
   base: {
+    flexDirection: 'row',
     minHeight: 48,
     borderRadius: Radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.lg,
+  },
+  icon: {
+    marginRight: Spacing.xs,
   },
   text: {
     fontSize: 16,

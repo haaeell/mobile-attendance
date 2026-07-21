@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Printer, RefreshCw } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -59,13 +60,13 @@ export default function AdminTeacherBarcodesListScreen() {
         onSuccess: async (result) => {
           try {
             const file = saveArrayBufferToCacheFile(result.data, result.filename);
-            await shareFile(file, { mimeType: 'application/pdf', dialogTitle: 'Kartu Barcode Guru' });
+            await shareFile(file, { mimeType: 'application/pdf', dialogTitle: 'Kartu QR Code Guru' });
           } catch (shareError) {
             Alert.alert('Gagal', (shareError as Error).message ?? 'Gagal membuka file PDF.');
           }
         },
         onError: (apiError: NormalizedApiError) => {
-          Alert.alert('Gagal', apiError.message || 'Gagal mencetak barcode guru.');
+          Alert.alert('Gagal', apiError.message || 'Gagal mencetak QR code guru.');
         },
       },
     );
@@ -75,8 +76,8 @@ export default function AdminTeacherBarcodesListScreen() {
     const teacherIds = selectedIds.size > 0 ? Array.from(selectedIds) : undefined;
 
     Alert.alert(
-      'Terbitkan Ulang Barcode',
-      `Barcode lama akan langsung tidak berlaku untuk ${teacherIds ? `${teacherIds.length} guru terpilih` : 'seluruh guru'}. Lanjutkan?`,
+      'Terbitkan Ulang QR Code',
+      `QR code lama akan langsung tidak berlaku untuk ${teacherIds ? `${teacherIds.length} guru terpilih` : 'seluruh guru'}. Lanjutkan?`,
       [
         { text: 'Batal', style: 'cancel' },
         {
@@ -86,10 +87,10 @@ export default function AdminTeacherBarcodesListScreen() {
               { teacher_ids: teacherIds },
               {
                 onSuccess: (count) => {
-                  Alert.alert('Berhasil', `${count} barcode guru berhasil diterbitkan ulang.`);
+                  Alert.alert('Berhasil', `${count} QR code guru berhasil diterbitkan ulang.`);
                   setSelectedIds(new Set());
                 },
-                onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang barcode.'),
+                onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang QR code.'),
               },
             );
           },
@@ -113,11 +114,17 @@ export default function AdminTeacherBarcodesListScreen() {
             </Text>
             <View style={styles.actionRow}>
               <View style={styles.actionButton}>
-                <AppButton title="Cetak Massal (PDF)" onPress={handlePrint} loading={printMutation.isPending} />
+                <AppButton
+                  title="Cetak Massal (PDF)"
+                  icon={Printer}
+                  onPress={handlePrint}
+                  loading={printMutation.isPending}
+                />
               </View>
               <View style={styles.actionButton}>
                 <AppButton
                   title="Terbitkan Ulang"
+                  icon={RefreshCw}
                   variant="secondary"
                   onPress={handleBulkRegenerate}
                   loading={bulkGenerateMutation.isPending}

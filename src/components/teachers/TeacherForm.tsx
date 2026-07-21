@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { IdCard, Lock, Mail, MapPin, Phone, Save, User } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -99,6 +100,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nomor Induk Guru"
+            icon={IdCard}
             placeholder="Nomor induk guru"
             value={value}
             onChangeText={onChange}
@@ -115,6 +117,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama"
+            icon={User}
             placeholder="Nama lengkap guru"
             value={value}
             onChangeText={onChange}
@@ -130,6 +133,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Email"
+            icon={Mail}
             placeholder="nama@sekolah.test"
             value={value}
             onChangeText={onChange}
@@ -157,6 +161,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nomor Telepon"
+            icon={Phone}
             placeholder="Nomor telepon (opsional)"
             value={value}
             onChangeText={onChange}
@@ -173,6 +178,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Alamat"
+            icon={MapPin}
             placeholder="Alamat (opsional)"
             value={value}
             onChangeText={onChange}
@@ -191,6 +197,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label={isCreate ? 'Password' : 'Password Baru (opsional)'}
+            icon={Lock}
             placeholder={isCreate ? 'Minimal 8 karakter' : 'Kosongkan jika tidak ingin mengubah password'}
             value={value}
             onChangeText={onChange}
@@ -220,6 +227,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label={isCreate ? 'Konfirmasi Password' : 'Konfirmasi Password Baru'}
+            icon={Lock}
             placeholder="Ulangi password"
             value={value}
             onChangeText={onChange}
@@ -232,7 +240,7 @@ export function TeacherForm({ mode, defaultValues, submitLabel, isSubmitting, on
         )}
       />
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       <SelectModal
         visible={isGenderModalOpen}

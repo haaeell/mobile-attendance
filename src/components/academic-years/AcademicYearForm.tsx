@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Calendar, Save } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -74,6 +75,7 @@ export function AcademicYearForm({ defaultValues, submitLabel, isSubmitting, onS
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama Tahun Ajaran"
+            icon={Calendar}
             placeholder="Contoh: 2026/2027"
             value={value}
             onChangeText={onChange}
@@ -117,7 +119,7 @@ export function AcademicYearForm({ defaultValues, submitLabel, isSubmitting, onS
         ) : null}
       </View>
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       {datePickerTarget ? (
         <DateTimePicker

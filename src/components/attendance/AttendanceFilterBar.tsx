@@ -1,4 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Search } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -79,6 +80,7 @@ export function AttendanceFilterBar({
       </View>
 
       <AppInput
+        icon={Search}
         placeholder="Cari nama..."
         value={keyword}
         onChangeText={onKeywordChange}

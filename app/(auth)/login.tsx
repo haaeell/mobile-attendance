@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Lock, LogIn, Mail } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -73,6 +74,7 @@ export default function LoginScreen() {
               render={({ field: { value, onChange, onBlur } }) => (
                 <AppInput
                   label="Email"
+                  icon={Mail}
                   placeholder="nama@sekolah.test"
                   value={value}
                   onChangeText={onChange}
@@ -95,6 +97,7 @@ export default function LoginScreen() {
               render={({ field: { value, onChange, onBlur } }) => (
                 <AppInput
                   label="Password"
+                  icon={Lock}
                   placeholder="Kata sandi"
                   value={value}
                   onChangeText={onChange}
@@ -131,7 +134,7 @@ export default function LoginScreen() {
               </View>
             ) : null}
 
-            <AppButton title="Masuk" onPress={onSubmit} loading={isLoggingIn} />
+            <AppButton title="Masuk" icon={LogIn} onPress={onSubmit} loading={isLoggingIn} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

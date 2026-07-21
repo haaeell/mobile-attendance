@@ -19,7 +19,7 @@ export function SevenDayTrend({ data }: SevenDayTrendProps) {
   const theme = useTheme();
 
   return (
-    <View style={[styles.container, CardShadow, { backgroundColor: theme.surface }]}>
+    <View style={[styles.container, CardShadow, { backgroundColor: theme.surface, borderColor: theme.border }]}>
       <View style={styles.row}>
         {data.map((entry) => {
           const barHeight = Math.max(4, (entry.attendance_percentage / 100) * BAR_MAX_HEIGHT);
@@ -51,6 +51,7 @@ export function SevenDayTrend({ data }: SevenDayTrendProps) {
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
   },

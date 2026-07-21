@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { CalendarClock, ClipboardEdit, Users } from 'lucide-react-native';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '@/components/AppButton';
@@ -92,14 +93,16 @@ export default function HomeroomIndexScreen() {
       </View>
 
       <View style={styles.actions}>
-        <AppButton title="Siswa Kelas" onPress={() => router.push('/(app)/homeroom/students')} />
+        <AppButton title="Siswa Kelas" icon={Users} onPress={() => router.push('/(app)/homeroom/students')} />
         <AppButton
           title="Kehadiran & Riwayat"
+          icon={CalendarClock}
           variant="secondary"
           onPress={() => router.push('/(app)/homeroom/attendances')}
         />
         <AppButton
           title="Update Status Siswa"
+          icon={ClipboardEdit}
           variant="secondary"
           onPress={() => router.push('/(app)/homeroom/update-status')}
         />

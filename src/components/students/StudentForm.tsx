@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Hash, IdCard, MapPin, Phone, Save, User, Users } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -159,6 +160,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="NIS"
+            icon={IdCard}
             placeholder="Nomor Induk Siswa"
             value={value}
             onChangeText={onChange}
@@ -175,6 +177,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="NISN"
+            icon={Hash}
             placeholder="Nomor Induk Siswa Nasional (opsional)"
             value={value}
             onChangeText={onChange}
@@ -191,6 +194,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama"
+            icon={User}
             placeholder="Nama lengkap siswa"
             value={value}
             onChangeText={onChange}
@@ -215,6 +219,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Tempat Lahir"
+            icon={MapPin}
             placeholder="Tempat lahir (opsional)"
             value={value}
             onChangeText={onChange}
@@ -241,6 +246,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama Orang Tua/Wali"
+            icon={Users}
             placeholder="Nama orang tua/wali (opsional)"
             value={value}
             onChangeText={onChange}
@@ -256,6 +262,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nomor Telepon Orang Tua/Wali"
+            icon={Phone}
             placeholder="Nomor telepon (opsional)"
             value={value}
             onChangeText={onChange}
@@ -272,6 +279,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Alamat"
+            icon={MapPin}
             placeholder="Alamat (opsional)"
             value={value}
             onChangeText={onChange}
@@ -284,7 +292,7 @@ export function StudentForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         )}
       />
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       <SelectModal
         visible={isAcademicYearModalOpen}

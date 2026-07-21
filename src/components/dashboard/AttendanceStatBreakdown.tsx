@@ -36,7 +36,7 @@ export function AttendanceStatBreakdown({ title, stats }: AttendanceStatBreakdow
   };
 
   return (
-    <View style={[styles.container, CardShadow, { backgroundColor: theme.surface }]}>
+    <View style={[styles.container, CardShadow, { backgroundColor: theme.surface, borderColor: theme.border }]}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.textPrimary }]}>{title}</Text>
         <Text style={[styles.total, { color: theme.textSecondary }]}>Total {stats.total}</Text>
@@ -60,6 +60,7 @@ export function AttendanceStatBreakdown({ title, stats }: AttendanceStatBreakdow
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: Spacing.sm,

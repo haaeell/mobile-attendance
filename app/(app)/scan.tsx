@@ -1,4 +1,6 @@
-import { CameraView, useCameraPermissions, type BarcodeScanningResult } from 'expo-camera';
+import { CameraView, useCameraPermissions, type BarcodeScanningResult, type CameraType } from 'expo-camera';
+import { Redirect } from 'expo-router';
+import { Flashlight, FlashlightOff, SwitchCamera, Wifi, WifiOff } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +11,7 @@ import { ScanResultPanel, type ScanResultState } from '@/components/scan/ScanRes
 import { ScanSessionSummary } from '@/components/scan/ScanSessionSummary';
 import { LoadingView } from '@/components/LoadingView';
 import { Radius, Spacing } from '@/constants/theme';
+import { useAuth } from '@/contexts/AuthContext';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useScanMutation } from '@/hooks/useScanMutation';
 import { useScanSession } from '@/hooks/useScanSession';
@@ -17,16 +20,18 @@ import { mapScanErrorMessage } from '@/constants/scanErrorMessages';
 import { getDeviceName } from '@/utils/device';
 
 const AUTO_RESUME_SECONDS = 5;
-const BARCODE_TYPES = ['code128', 'qr'] as const;
+const BARCODE_TYPES = ['qr'] as const;
 
 export default function ScanScreen() {
   const theme = useTheme();
+  const { user } = useAuth();
   const [permission, requestPermission] = useCameraPermissions();
   const { isConnected } = useNetworkStatus();
   const { successCount, history, recordSuccess, recordError } = useScanSession();
   const scanMutation = useScanMutation();
 
   const [torchOn, setTorchOn] = useState(false);
+  const [facing, setFacing] = useState<CameraType>('back');
   const [result, setResult] = useState<ScanResultState>({ kind: 'idle' });
   const [autoResumeSeconds, setAutoResumeSeconds] = useState<number | null>(null);
   // Dipakai untuk render (dim frame, lepas handler kamera).
@@ -126,6 +131,12 @@ export default function ScanScreen() {
     [isConnected, recordError, recordSuccess, resumeScanning, scanMutation, startAutoResumeCountdown],
   );
 
+  // Fitur scan khusus admin — guru tidak melihat tab-nya, tapi tetap dijaga
+  // di sini seandainya route ini dibuka lewat navigasi langsung.
+  if (user && user.role !== 'admin') {
+    return <Redirect href="/(app)/dashboard" />;
+  }
+
   if (!permission) {
     return <LoadingView message="Menyiapkan kamera..." />;
   }
@@ -141,7 +152,7 @@ export default function ScanScreen() {
       <View style={styles.cameraWrapper}>
         <CameraView
           style={StyleSheet.absoluteFill}
-          facing="back"
+          facing={facing}
           enableTorch={torchOn}
           barcodeScannerSettings={{ barcodeTypes: [...BARCODE_TYPES] }}
           onBarcodeScanned={isLocked ? undefined : handleBarcodeScanned}
@@ -151,19 +162,34 @@ export default function ScanScreen() {
         <View style={styles.topBar}>
           <View
             style={[
-              styles.connectionBadge,
+              styles.iconBadge,
               { backgroundColor: isConnected ? 'rgba(22,163,74,0.9)' : 'rgba(220,38,38,0.9)' },
             ]}>
-            <Text style={styles.connectionText}>{isConnected ? 'Online' : 'Offline'}</Text>
+            {isConnected ? <Wifi color="#FFFFFF" size={16} /> : <WifiOff color="#FFFFFF" size={16} />}
+            <Text style={styles.iconBadgeText}>{isConnected ? 'Online' : 'Offline'}</Text>
           </View>
 
-          <Pressable
-            onPress={() => setTorchOn((value) => !value)}
-            style={[styles.torchButton, { backgroundColor: torchOn ? theme.primary : 'rgba(0,0,0,0.5)' }]}
-            accessibilityRole="button"
-            accessibilityLabel={torchOn ? 'Matikan flash' : 'Nyalakan flash'}>
-            <Text style={styles.torchText}>{torchOn ? 'Flash Aktif' : 'Flash'}</Text>
-          </Pressable>
+          <View style={styles.topBarActions}>
+            <Pressable
+              onPress={() => setFacing((current) => (current === 'back' ? 'front' : 'back'))}
+              style={styles.roundButton}
+              accessibilityRole="button"
+              accessibilityLabel="Ganti kamera depan/belakang">
+              <SwitchCamera color="#FFFFFF" size={20} />
+            </Pressable>
+
+            <Pressable
+              onPress={() => setTorchOn((value) => !value)}
+              style={[styles.roundButton, torchOn ? { backgroundColor: theme.primary } : null]}
+              accessibilityRole="button"
+              accessibilityLabel={torchOn ? 'Matikan flash' : 'Nyalakan flash'}>
+              {torchOn ? (
+                <Flashlight color="#FFFFFF" size={20} />
+              ) : (
+                <FlashlightOff color="#FFFFFF" size={20} />
+              )}
+            </Pressable>
+          </View>
         </View>
       </View>
 
@@ -174,7 +200,7 @@ export default function ScanScreen() {
           <ScanResultPanel result={result} onScanNext={resumeScanning} autoResumeSeconds={autoResumeSeconds} />
         ) : (
           <Text style={[styles.hint, { color: theme.textSecondary }]}>
-            Arahkan kamera ke barcode Code 128 atau QR pada kartu.
+            Arahkan kamera ke QR code pada kartu.
           </Text>
         )}
 
@@ -191,6 +217,9 @@ const styles = StyleSheet.create({
   cameraWrapper: {
     height: '45%',
     backgroundColor: '#000000',
+    borderBottomLeftRadius: Radius.xl,
+    borderBottomRightRadius: Radius.xl,
+    overflow: 'hidden',
   },
   topBar: {
     position: 'absolute',
@@ -199,26 +228,32 @@ const styles = StyleSheet.create({
     right: Spacing.md,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
-  connectionBadge: {
+  topBarActions: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  iconBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs / 2,
     paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs / 2,
+    paddingVertical: Spacing.xs / 2 + 2,
     borderRadius: Radius.full,
   },
-  connectionText: {
+  iconBadgeText: {
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '700',
   },
-  torchButton: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs / 2,
+  roundButton: {
+    width: 36,
+    height: 36,
     borderRadius: Radius.full,
-  },
-  torchText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   bottomSheet: {
     flex: 1,

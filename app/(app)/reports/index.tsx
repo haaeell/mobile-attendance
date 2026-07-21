@@ -1,5 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
+import { FileSpreadsheet, FileText, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -169,6 +170,7 @@ export default function ReportsScreen() {
             )}
 
             <AppInput
+              icon={Search}
               placeholder="Cari nama..."
               value={keyword}
               onChangeText={setKeyword}
@@ -213,6 +215,7 @@ export default function ReportsScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Export Excel"
+                  icon={FileSpreadsheet}
                   variant="secondary"
                   onPress={() => handleExport('excel')}
                   loading={exportExcelMutation.isPending}
@@ -221,6 +224,7 @@ export default function ReportsScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Export PDF"
+                  icon={FileText}
                   variant="secondary"
                   onPress={() => handleExport('pdf')}
                   loading={exportPdfMutation.isPending}

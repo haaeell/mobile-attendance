@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Save } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
@@ -228,7 +229,7 @@ export function AttendanceSettingForm({
         <Text style={[styles.explanationText, { color: theme.textSecondary }]}>{ruleExplanation}</Text>
       </View>
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       <SelectModal
         visible={isAcademicYearModalOpen}

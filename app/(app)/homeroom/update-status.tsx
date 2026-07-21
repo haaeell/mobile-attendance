@@ -3,6 +3,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { FileText, ImagePlus, Save } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -269,6 +270,7 @@ export default function HomeroomUpdateStatusScreen() {
         render={({ field: { value, onChange } }) => (
           <AppInput
             label="Keterangan"
+            icon={FileText}
             placeholder="Keterangan (opsional)"
             value={value}
             onChangeText={onChange}
@@ -302,10 +304,10 @@ export default function HomeroomUpdateStatusScreen() {
         ) : (
           <View style={styles.fileButtonsRow}>
             <View style={styles.fileButton}>
-              <AppButton title="Pilih Dokumen (PDF)" variant="secondary" onPress={pickDocument} />
+              <AppButton title="Pilih Dokumen (PDF)" icon={FileText} variant="secondary" onPress={pickDocument} />
             </View>
             <View style={styles.fileButton}>
-              <AppButton title="Pilih Foto" variant="secondary" onPress={pickImage} />
+              <AppButton title="Pilih Foto" icon={ImagePlus} variant="secondary" onPress={pickImage} />
             </View>
           </View>
         )}
@@ -313,7 +315,7 @@ export default function HomeroomUpdateStatusScreen() {
         {fileError ? <Text style={[styles.errorText, { color: theme.danger }]}>{fileError}</Text> : null}
       </View>
 
-      <AppButton title="Simpan" onPress={onSubmit} loading={updateStatusMutation.isPending} />
+      <AppButton title="Simpan" icon={Save} onPress={onSubmit} loading={updateStatusMutation.isPending} />
 
       <SelectModal
         visible={isStudentModalOpen}

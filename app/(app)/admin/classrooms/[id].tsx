@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { GraduationCap, Pencil, UserX } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 
@@ -134,6 +135,7 @@ export default function AdminClassroomDetailScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Pilih Wali Kelas"
+                  icon={GraduationCap}
                   variant="secondary"
                   onPress={() => setIsTeacherModalOpen(true)}
                   loading={updateHomeroomTeacherMutation.isPending}
@@ -143,6 +145,7 @@ export default function AdminClassroomDetailScreen() {
                 <View style={styles.actionButton}>
                   <AppButton
                     title="Lepas Wali Kelas"
+                    icon={UserX}
                     variant="danger"
                     onPress={handleUnassignTeacher}
                     loading={updateHomeroomTeacherMutation.isPending}
@@ -152,7 +155,11 @@ export default function AdminClassroomDetailScreen() {
             </View>
           </View>
 
-          <AppButton title="Edit Kelas" onPress={() => router.push(`/(app)/admin/classrooms/edit/${classroomId}`)} />
+          <AppButton
+            title="Edit Kelas"
+            icon={Pencil}
+            onPress={() => router.push(`/(app)/admin/classrooms/edit/${classroomId}`)}
+          />
 
           <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>
             Siswa Kelas ({studentsQuery.data?.pages[0]?.meta.total ?? students.length})

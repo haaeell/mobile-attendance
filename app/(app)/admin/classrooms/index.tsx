@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Plus } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -48,7 +49,7 @@ export default function AdminClassroomsListScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <AppButton title="+ Tambah Kelas" onPress={() => router.push('/(app)/admin/classrooms/create')} />
+            <AppButton title="Tambah Kelas" icon={Plus} onPress={() => router.push('/(app)/admin/classrooms/create')} />
 
             <Pressable
               style={[styles.filterButton, { borderColor: theme.border, backgroundColor: theme.surface }]}

@@ -1,5 +1,7 @@
 import { Stack } from 'expo-router';
 
+import { AppHeader } from '@/components/navigation/AppHeader';
+
 /**
  * Stack internal untuk tab Data Master, supaya navigasi antar modul (mis.
  * siswa, guru) bisa push seperti biasa (header ditangani di sini, bukan
@@ -7,7 +9,7 @@ import { Stack } from 'expo-router';
  */
 export default function AdminStackLayout() {
   return (
-    <Stack>
+    <Stack screenOptions={{ header: (props) => <AppHeader {...props} /> }}>
       <Stack.Screen name="index" options={{ title: 'Data Master' }} />
       <Stack.Screen name="students" options={{ headerShown: false }} />
       <Stack.Screen name="teachers" options={{ headerShown: false }} />

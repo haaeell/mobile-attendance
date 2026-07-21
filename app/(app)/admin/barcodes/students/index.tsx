@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Printer, RefreshCw } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -73,13 +74,13 @@ export default function AdminStudentBarcodesListScreen() {
         onSuccess: async (result) => {
           try {
             const file = saveArrayBufferToCacheFile(result.data, result.filename);
-            await shareFile(file, { mimeType: 'application/pdf', dialogTitle: 'Kartu Barcode Siswa' });
+            await shareFile(file, { mimeType: 'application/pdf', dialogTitle: 'Kartu QR Code Siswa' });
           } catch (shareError) {
             Alert.alert('Gagal', (shareError as Error).message ?? 'Gagal membuka file PDF.');
           }
         },
         onError: (apiError: NormalizedApiError) => {
-          Alert.alert('Gagal', apiError.message || 'Gagal mencetak barcode siswa.');
+          Alert.alert('Gagal', apiError.message || 'Gagal mencetak QR code siswa.');
         },
       },
     );
@@ -94,8 +95,8 @@ export default function AdminStudentBarcodesListScreen() {
     }
 
     Alert.alert(
-      'Terbitkan Ulang Barcode',
-      `Barcode lama akan langsung tidak berlaku untuk ${studentIds ? `${studentIds.length} siswa terpilih` : 'seluruh siswa di kelas ini'}. Lanjutkan?`,
+      'Terbitkan Ulang QR Code',
+      `QR code lama akan langsung tidak berlaku untuk ${studentIds ? `${studentIds.length} siswa terpilih` : 'seluruh siswa di kelas ini'}. Lanjutkan?`,
       [
         { text: 'Batal', style: 'cancel' },
         {
@@ -105,10 +106,10 @@ export default function AdminStudentBarcodesListScreen() {
               { student_ids: studentIds, classroom_id: studentIds ? undefined : (classroomId ?? undefined) },
               {
                 onSuccess: (count) => {
-                  Alert.alert('Berhasil', `${count} barcode siswa berhasil diterbitkan ulang.`);
+                  Alert.alert('Berhasil', `${count} QR code siswa berhasil diterbitkan ulang.`);
                   setSelectedIds(new Set());
                 },
-                onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang barcode.'),
+                onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang QR code.'),
               },
             );
           },
@@ -141,6 +142,7 @@ export default function AdminStudentBarcodesListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Cetak Massal (PDF)"
+                  icon={Printer}
                   onPress={handlePrint}
                   loading={printMutation.isPending}
                 />
@@ -148,6 +150,7 @@ export default function AdminStudentBarcodesListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Terbitkan Ulang"
+                  icon={RefreshCw}
                   variant="secondary"
                   onPress={handleBulkRegenerate}
                   loading={bulkGenerateMutation.isPending}

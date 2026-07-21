@@ -1,8 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { CircleCheck, CircleX, ScanLine } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Animated, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '@/components/AppButton';
 import { StatusBadge } from '@/components/StatusBadge';
-import { Radius, Spacing } from '@/constants/theme';
+import { CardShadow, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import type { ScanSuccessData } from '@/types/scan';
 
@@ -44,31 +46,64 @@ function statusTone(status: ScanSuccessData['status']): 'success' | 'warning' | 
   }
 }
 
+/**
+ * Kartu "alert" custom pengganti Alert.alert bawaan — muncul dengan animasi
+ * fade + scale setiap kali status scan berubah, supaya terasa seperti
+ * notifikasi modern alih-alih teks statis.
+ */
 export function ScanResultPanel({ result, onScanNext, autoResumeSeconds }: ScanResultPanelProps) {
   const theme = useTheme();
+  const [anim] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    anim.setValue(0);
+    Animated.spring(anim, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 8,
+      tension: 80,
+    }).start();
+  }, [result.kind, anim]);
 
   if (result.kind === 'idle') {
     return null;
   }
 
+  const animatedStyle = {
+    opacity: anim,
+    transform: [
+      { scale: anim.interpolate({ inputRange: [0, 1], outputRange: [0.92, 1] }) },
+      { translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) },
+    ],
+  };
+
   if (result.kind === 'processing') {
     return (
-      <View style={[styles.panel, { backgroundColor: theme.surface, borderColor: theme.border }]}>
-        <ActivityIndicator color={theme.primary} />
+      <Animated.View style={[styles.panel, CardShadow, { backgroundColor: theme.surface }, animatedStyle]}>
+        <View style={[styles.iconBadge, { backgroundColor: `${theme.primary}1A` }]}>
+          <ActivityIndicator color={theme.primary} />
+        </View>
         <Text style={[styles.processingText, { color: theme.textSecondary }]}>
           Memproses scan, mohon tunggu...
         </Text>
-      </View>
+      </Animated.View>
     );
   }
 
   if (result.kind === 'error') {
     return (
-      <View style={[styles.panel, { backgroundColor: theme.surface, borderColor: theme.danger }]}>
-        <StatusBadge label="Gagal" tone="danger" />
-        <Text style={[styles.errorMessage, { color: theme.textPrimary }]}>{result.message}</Text>
+      <Animated.View style={[styles.panel, CardShadow, { backgroundColor: theme.surface }, animatedStyle]}>
+        <View style={styles.headerRow}>
+          <View style={[styles.iconBadge, { backgroundColor: `${theme.danger}1A` }]}>
+            <CircleX color={theme.danger} size={26} />
+          </View>
+          <View style={styles.headerText}>
+            <Text style={[styles.title, { color: theme.danger }]}>Scan Gagal</Text>
+            <Text style={[styles.errorMessage, { color: theme.textPrimary }]}>{result.message}</Text>
+          </View>
+        </View>
         <ScanNextButton onScanNext={onScanNext} autoResumeSeconds={autoResumeSeconds} />
-      </View>
+      </Animated.View>
     );
   }
 
@@ -78,13 +113,24 @@ export function ScanResultPanel({ result, onScanNext, autoResumeSeconds }: ScanR
   const identifierLabel = data.subject_type === 'student' ? 'NIS' : 'NIP';
 
   return (
-    <View style={[styles.panel, { backgroundColor: theme.surface, borderColor: theme.success }]}>
+    <Animated.View style={[styles.panel, CardShadow, { backgroundColor: theme.surface }, animatedStyle]}>
       <View style={styles.headerRow}>
+        <View style={[styles.iconBadge, { backgroundColor: `${theme.success}1A` }]}>
+          <CircleCheck color={theme.success} size={26} />
+        </View>
+        <View style={styles.headerText}>
+          <Text style={[styles.title, { color: theme.success }]}>Scan Berhasil</Text>
+          <Text style={[styles.name, { color: theme.textPrimary }]} numberOfLines={1}>
+            {data.name}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.badgeRow}>
         <StatusBadge label={scanTypeLabel} tone="success" />
         <StatusBadge label={data.status_label} tone={statusTone(data.status)} />
       </View>
 
-      <Text style={[styles.name, { color: theme.textPrimary }]}>{data.name}</Text>
       <Text style={[styles.subLine, { color: theme.textSecondary }]}>
         {subjectLabel} • {identifierLabel} {data.identifier}
         {data.classroom ? ` • ${data.classroom.name}` : ''}
@@ -96,7 +142,7 @@ export function ScanResultPanel({ result, onScanNext, autoResumeSeconds }: ScanR
       </View>
 
       <ScanNextButton onScanNext={onScanNext} autoResumeSeconds={autoResumeSeconds} />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -121,25 +167,46 @@ function ScanNextButton({
   const title =
     autoResumeSeconds !== null ? `Scan Berikutnya (${autoResumeSeconds}s)` : 'Scan Berikutnya';
 
-  return <AppButton title={title} onPress={onScanNext} />;
+  return <AppButton title={title} icon={ScanLine} onPress={onScanNext} />;
 }
 
 const styles = StyleSheet.create({
   panel: {
-    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.lg,
-    gap: Spacing.sm,
+    gap: Spacing.md,
+  },
+  iconBadge: {
+    width: 48,
+    height: 48,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   processingText: {
     fontSize: 14,
     textAlign: 'center',
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  headerText: {
+    flex: 1,
+    gap: Spacing.xs / 2,
+  },
+  title: {
+    fontSize: 13,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   errorMessage: {
     fontSize: 15,
     fontWeight: '600',
   },
-  headerRow: {
+  badgeRow: {
     flexDirection: 'row',
     gap: Spacing.xs,
   },

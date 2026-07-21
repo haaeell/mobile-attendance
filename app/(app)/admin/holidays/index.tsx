@@ -1,5 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
+import { Pencil, Plus, Trash2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -79,7 +80,7 @@ export default function AdminHolidaysListScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <AppButton title="+ Tambah Hari Libur" onPress={() => router.push('/(app)/admin/holidays/create')} />
+            <AppButton title="Tambah Hari Libur" icon={Plus} onPress={() => router.push('/(app)/admin/holidays/create')} />
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
               {APPLIES_TO_OPTIONS.map((option) => {
@@ -141,6 +142,7 @@ export default function AdminHolidaysListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Edit"
+                  icon={Pencil}
                   variant="secondary"
                   onPress={() => router.push(`/(app)/admin/holidays/edit/${item.id}`)}
                 />
@@ -148,6 +150,7 @@ export default function AdminHolidaysListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Hapus"
+                  icon={Trash2}
                   variant="danger"
                   onPress={() => handleDelete(item)}
                   loading={deleteMutation.isPending}

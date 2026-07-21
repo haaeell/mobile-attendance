@@ -15,7 +15,7 @@ export default function MoreScreen() {
   const isHomeroomTeacher = !isAdmin && user?.is_homeroom_teacher === true;
 
   const menuItems: { title: string; subtitle: string; icon: LucideIcon; href: Href }[] = [
-    { title: 'Profil', subtitle: 'Data akun dan keluar', icon: UserCircle, href: '/(app)/profile' },
+    { title: 'Profil', subtitle: 'Data akun dan keluar', icon: UserCircle, href: '/(app)/more/profile' },
     ...(isAdmin
       ? [
           {

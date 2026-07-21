@@ -1,4 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
+import { RefreshCw, Share2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -30,7 +31,7 @@ export default function AdminTeacherBarcodeDetailScreen() {
   const [isSharing, setIsSharing] = useState(false);
 
   const imageFile = useMemo(
-    () => (imageBuffer ? saveArrayBufferToCacheFile(imageBuffer, `barcode-guru-${teacherId}.png`) : null),
+    () => (imageBuffer ? saveArrayBufferToCacheFile(imageBuffer, `qrcode-guru-${teacherId}.png`) : null),
     [imageBuffer, teacherId],
   );
 
@@ -39,9 +40,9 @@ export default function AdminTeacherBarcodeDetailScreen() {
 
     setIsSharing(true);
     try {
-      await shareFile(imageFile, { mimeType: 'image/png', dialogTitle: 'Barcode Guru' });
+      await shareFile(imageFile, { mimeType: 'image/png', dialogTitle: 'QR Code Guru' });
     } catch (shareError) {
-      Alert.alert('Gagal', (shareError as Error).message ?? 'Gagal membagikan barcode.');
+      Alert.alert('Gagal', (shareError as Error).message ?? 'Gagal membagikan QR code.');
     } finally {
       setIsSharing(false);
     }
@@ -49,8 +50,8 @@ export default function AdminTeacherBarcodeDetailScreen() {
 
   const handleRegenerate = () => {
     Alert.alert(
-      'Terbitkan Ulang Barcode',
-      'Barcode lama akan langsung tidak berlaku dan digantikan dengan barcode baru. Lanjutkan?',
+      'Terbitkan Ulang QR Code',
+      'QR code lama akan langsung tidak berlaku dan digantikan dengan QR code baru. Lanjutkan?',
       [
         { text: 'Batal', style: 'cancel' },
         {
@@ -58,7 +59,7 @@ export default function AdminTeacherBarcodeDetailScreen() {
           onPress: () => {
             regenerateMutation.mutate(undefined, {
               onSuccess: () => refetch(),
-              onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang barcode.'),
+              onError: (apiError) => Alert.alert('Gagal', apiError.message || 'Gagal menerbitkan ulang QR code.'),
             });
           },
         },
@@ -77,7 +78,7 @@ export default function AdminTeacherBarcodeDetailScreen() {
   if (isError) {
     return (
       <ErrorState
-        title="Gagal memuat barcode"
+        title="Gagal memuat QR code"
         message={error?.message ?? 'Silakan coba lagi.'}
         onRetry={refetch}
       />
@@ -104,9 +105,16 @@ export default function AdminTeacherBarcodeDetailScreen() {
       </View>
 
       <View style={styles.actions}>
-        <AppButton title="Unduh & Bagikan" onPress={handleShare} loading={isSharing} disabled={!imageFile} />
         <AppButton
-          title="Terbitkan Ulang Barcode"
+          title="Unduh & Bagikan"
+          icon={Share2}
+          onPress={handleShare}
+          loading={isSharing}
+          disabled={!imageFile}
+        />
+        <AppButton
+          title="Terbitkan Ulang QR Code"
+          icon={RefreshCw}
           variant="secondary"
           onPress={handleRegenerate}
           loading={regenerateMutation.isPending}
@@ -141,8 +149,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: '100%',
-    height: 140,
+    width: 220,
+    height: 220,
   },
   actions: {
     gap: Spacing.sm,

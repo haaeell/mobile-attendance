@@ -25,7 +25,9 @@ export function RecentScansList({ scans }: RecentScansListProps) {
   return (
     <View style={styles.list}>
       {scans.map((scan) => (
-        <View key={scan.id} style={[styles.item, CardShadow, { backgroundColor: theme.surface }]}>
+        <View
+          key={scan.id}
+          style={[styles.item, CardShadow, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <View style={styles.itemHeader}>
             <Text style={[styles.barcode, { color: theme.textPrimary }]}>{scan.barcode_masked}</Text>
             <StatusBadge
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   item: {
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: Spacing.xs,

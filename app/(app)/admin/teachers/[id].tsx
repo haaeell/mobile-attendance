@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Pencil, Power, PowerOff, RefreshCw, Trash2 } from 'lucide-react-native';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '@/components/AppButton';
@@ -95,15 +96,15 @@ export default function AdminTeacherDetailScreen() {
 
   const handleRegenerateBarcode = () => {
     Alert.alert(
-      'Terbitkan Ulang Barcode',
-      'Barcode lama akan langsung tidak berlaku dan digantikan dengan barcode baru. Lanjutkan?',
+      'Terbitkan Ulang QR Code',
+      'QR code lama akan langsung tidak berlaku dan digantikan dengan QR code baru. Lanjutkan?',
       [
         { text: 'Batal', style: 'cancel' },
         {
           text: 'Terbitkan',
           onPress: () => {
             regenerateBarcodeMutation.mutate(undefined, {
-              onError: (mutationError) => showError(mutationError, 'Gagal menerbitkan ulang barcode.'),
+              onError: (mutationError) => showError(mutationError, 'Gagal menerbitkan ulang QR code.'),
             });
           },
         },
@@ -115,15 +116,15 @@ export default function AdminTeacherDetailScreen() {
     const nextStatus = teacher.barcode_status === 'active' ? 'inactive' : 'active';
 
     Alert.alert(
-      'Ubah Status Barcode',
-      `Yakin ingin mengubah status barcode menjadi ${nextStatus === 'active' ? 'Aktif' : 'Tidak Aktif'}?`,
+      'Ubah Status QR Code',
+      `Yakin ingin mengubah status QR code menjadi ${nextStatus === 'active' ? 'Aktif' : 'Tidak Aktif'}?`,
       [
         { text: 'Batal', style: 'cancel' },
         {
           text: 'Ya',
           onPress: () => {
             updateBarcodeStatusMutation.mutate(nextStatus, {
-              onError: (mutationError) => showError(mutationError, 'Gagal mengubah status barcode.'),
+              onError: (mutationError) => showError(mutationError, 'Gagal mengubah status QR code.'),
             });
           },
         },
@@ -154,37 +155,45 @@ export default function AdminTeacherDetailScreen() {
 
       <View style={[styles.card, { backgroundColor: theme.surface, borderColor: theme.border }]}>
         <View style={styles.headerRow}>
-          <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>Barcode</Text>
+          <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>QR Code</Text>
           <StatusBadge
             label={teacher.barcode_status_label}
             tone={teacher.barcode_status === 'active' ? 'success' : 'neutral'}
           />
         </View>
-        <DetailRow label="Nilai Barcode" value={teacher.barcode_value ?? '-'} />
+        <DetailRow label="Nilai QR Code" value={teacher.barcode_value ?? '-'} />
       </View>
 
       <View style={styles.actions}>
-        <AppButton title="Edit Guru" onPress={() => router.push(`/(app)/admin/teachers/edit/${teacherId}`)} />
+        <AppButton
+          title="Edit Guru"
+          icon={Pencil}
+          onPress={() => router.push(`/(app)/admin/teachers/edit/${teacherId}`)}
+        />
         <AppButton
           title={teacher.is_active ? 'Nonaktifkan Guru' : 'Aktifkan Guru'}
+          icon={teacher.is_active ? PowerOff : Power}
           variant="secondary"
           onPress={handleToggleStatus}
           loading={updateStatusMutation.isPending}
         />
         <AppButton
-          title="Terbitkan Ulang Barcode"
+          title="Terbitkan Ulang QR Code"
+          icon={RefreshCw}
           variant="secondary"
           onPress={handleRegenerateBarcode}
           loading={regenerateBarcodeMutation.isPending}
         />
         <AppButton
-          title={teacher.barcode_status === 'active' ? 'Nonaktifkan Barcode' : 'Aktifkan Barcode'}
+          title={teacher.barcode_status === 'active' ? 'Nonaktifkan QR Code' : 'Aktifkan QR Code'}
+          icon={teacher.barcode_status === 'active' ? PowerOff : Power}
           variant="secondary"
           onPress={handleToggleBarcodeStatus}
           loading={updateBarcodeStatusMutation.isPending}
         />
         <AppButton
           title="Hapus Guru"
+          icon={Trash2}
           variant="danger"
           onPress={handleDelete}
           loading={deleteTeacherMutation.isPending}

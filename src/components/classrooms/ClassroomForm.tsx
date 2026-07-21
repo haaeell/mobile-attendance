@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BookOpen, Layers, Save, School } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
@@ -105,6 +106,7 @@ export function ClassroomForm({ defaultValues, submitLabel, isSubmitting, onSubm
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama Kelas"
+            icon={School}
             placeholder="Contoh: X IPA 1"
             value={value}
             onChangeText={onChange}
@@ -120,6 +122,7 @@ export function ClassroomForm({ defaultValues, submitLabel, isSubmitting, onSubm
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Tingkat Kelas"
+            icon={Layers}
             placeholder="Contoh: X, XI, XII"
             value={value}
             onChangeText={onChange}
@@ -135,6 +138,7 @@ export function ClassroomForm({ defaultValues, submitLabel, isSubmitting, onSubm
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Jurusan"
+            icon={BookOpen}
             placeholder="Jurusan (opsional)"
             value={value}
             onChangeText={onChange}
@@ -153,7 +157,7 @@ export function ClassroomForm({ defaultValues, submitLabel, isSubmitting, onSubm
         />
       </View>
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       <SelectModal
         visible={isAcademicYearModalOpen}

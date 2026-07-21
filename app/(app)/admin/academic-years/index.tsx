@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { CircleCheck, Pencil, Plus, Trash2 } from 'lucide-react-native';
 import { useMemo } from 'react';
 import { ActivityIndicator, Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -86,7 +87,8 @@ export default function AdminAcademicYearsListScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <AppButton
-            title="+ Tambah Tahun Ajaran"
+            title="Tambah Tahun Ajaran"
+            icon={Plus}
             onPress={() => router.push('/(app)/admin/academic-years/create')}
           />
         }
@@ -108,6 +110,7 @@ export default function AdminAcademicYearsListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Edit"
+                  icon={Pencil}
                   variant="secondary"
                   onPress={() => router.push(`/(app)/admin/academic-years/edit/${item.id}`)}
                 />
@@ -116,6 +119,7 @@ export default function AdminAcademicYearsListScreen() {
                 <View style={styles.actionButton}>
                   <AppButton
                     title="Aktifkan"
+                    icon={CircleCheck}
                     variant="secondary"
                     onPress={() => handleActivate(item)}
                     loading={activateMutation.isPending}
@@ -125,6 +129,7 @@ export default function AdminAcademicYearsListScreen() {
               <View style={styles.actionButton}>
                 <AppButton
                   title="Hapus"
+                  icon={Trash2}
                   variant="danger"
                   onPress={() => handleDelete(item)}
                   loading={deleteMutation.isPending}

@@ -13,7 +13,9 @@ import { useTheme } from '@/hooks/use-theme';
  * Bottom tab bar sengaja dibatasi 5 menu: Home, Absensi, Scan (menonjol),
  * Laporan, Lainnya. Data Master, Wali Kelas, dan Profil tetap route yang
  * valid (jadi bisa di-push dari menu Lainnya) tapi disembunyikan dari tab
- * bar (`href: null`) supaya tidak melebihi 5 tombol.
+ * bar (`href: null`) supaya tidak melebihi 5 tombol. Tab Scan hanya untuk
+ * admin — guru tidak melihat tombolnya sama sekali (lihat juga guard di
+ * app/(app)/scan.tsx untuk navigasi langsung).
  */
 export default function AppLayout() {
   const { user, isAuthenticated, isInitializing } = useAuth();
@@ -26,6 +28,8 @@ export default function AppLayout() {
   if (!isAuthenticated || !user) {
     return <Redirect href="/(auth)/login" />;
   }
+
+  const isAdmin = user.role === 'admin';
 
   return (
     <Tabs
@@ -59,12 +63,14 @@ export default function AppLayout() {
           title: '',
           tabBarIcon: ({ color, size }) => <ScanLine color={color} size={size} />,
           tabBarButton: ScanTabButton,
+          href: isAdmin ? undefined : null,
         }}
       />
       <Tabs.Screen
-        name="reports/index"
+        name="reports"
         options={{
           title: 'Laporan',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <BarChart3 color={color} size={size} />,
         }}
       />
@@ -72,6 +78,7 @@ export default function AppLayout() {
         name="more"
         options={{
           title: 'Lainnya',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <MoreHorizontal color={color} size={size} />,
         }}
       />
@@ -79,7 +86,6 @@ export default function AppLayout() {
       {/* Route valid, tapi disembunyikan dari tab bar — diakses lewat menu Lainnya. */}
       <Tabs.Screen name="admin" options={{ headerShown: false, href: null }} />
       <Tabs.Screen name="homeroom" options={{ headerShown: false, href: null }} />
-      <Tabs.Screen name="profile" options={{ title: 'Profil', href: null }} />
     </Tabs>
   );
 }

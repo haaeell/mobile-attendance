@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Building2, GraduationCap, Users } from 'lucide-react-native';
+import { Building2, GraduationCap, LogIn, LogOut, Users } from 'lucide-react-native';
 import type { ReactNode } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
 
@@ -22,12 +22,24 @@ import { formatTime } from '@/utils/formatters';
 import { isAdminDashboard } from '@/types/dashboard';
 
 /**
- * Glow dekoratif kuning lembut di belakang header + CTA scan, memudar ke
- * warna background biasa — murni aksen visual, bukan penanda status apa pun.
+ * Glow dekoratif kuning lembut di belakang header + CTA scan — dibuat
+ * sebagai overlay semi-transparan (bukan warna solid) supaya terlihat
+ * seperti wash/opacity tipis yang memudar total ke transparan, bukan blok
+ * warna kuning yang mencolok.
  */
 const GLOW_COLORS = {
-  light: ['#FEF3C7', '#FFF3C4', '#FFFBEB', '#FFFFFF'] as const,
-  dark: ['#3A2E10', '#2C220D', '#1A1509', '#0B0D10'] as const,
+  light: [
+    'rgba(250,204,21,0.16)',
+    'rgba(250,204,21,0.09)',
+    'rgba(250,204,21,0.03)',
+    'rgba(250,204,21,0)',
+  ] as const,
+  dark: [
+    'rgba(250,204,21,0.12)',
+    'rgba(250,204,21,0.06)',
+    'rgba(250,204,21,0.02)',
+    'rgba(250,204,21,0)',
+  ] as const,
 };
 
 export default function DashboardScreen() {
@@ -36,6 +48,7 @@ export default function DashboardScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { data, isPending, isError, error, refetch, isRefetching } = useDashboard();
+  const isAdmin = user?.role === 'admin';
 
   const handleQuickScan = () => router.push('/(app)/scan');
 
@@ -54,15 +67,17 @@ export default function DashboardScreen() {
         <DashboardHeader
           userName={user?.name ?? ''}
           subtitle={
-            user?.role === 'admin'
+            isAdmin
               ? 'Kelola absensi dengan mudah dan akurat.'
               : 'Pantau kehadiran dengan mudah dan akurat.'
           }
         />
 
-        <View style={styles.scanCtaWrapper}>
-          <DashboardScanCta onPress={handleQuickScan} />
-        </View>
+        {isAdmin ? (
+          <View style={styles.scanCtaWrapper}>
+            <DashboardScanCta onPress={handleQuickScan} />
+          </View>
+        ) : null}
       </LinearGradient>
 
       <View style={styles.body}>
@@ -105,21 +120,52 @@ export default function DashboardScreen() {
           <View style={styles.sections}>
             <Section title="Kehadiran Saya Hari Ini">
               {data.own_attendance ? (
-                <View style={[styles.ownAttendance, CardShadow, { backgroundColor: theme.surface }]}>
+                <View
+                  style={[
+                    styles.ownAttendance,
+                    CardShadow,
+                    { backgroundColor: theme.surface, borderColor: theme.border },
+                  ]}>
                   <StatusBadge
                     label={data.own_attendance.final_status_label}
                     tone={data.own_attendance.final_status === 'present' ? 'success' : 'warning'}
                   />
-                  <Text style={[styles.ownAttendanceText, { color: theme.textSecondary }]}>
-                    Masuk:{' '}
-                    {data.own_attendance.check_in_at ? formatTime(data.own_attendance.check_in_at) : '-'}
-                    {'  •  '}
-                    Pulang:{' '}
-                    {data.own_attendance.check_out_at ? formatTime(data.own_attendance.check_out_at) : '-'}
-                  </Text>
+                  <View style={styles.ownAttendanceGrid}>
+                    <View style={styles.ownAttendanceCell}>
+                      <View style={[styles.ownAttendanceIconBadge, { backgroundColor: `${theme.success}1A` }]}>
+                        <LogIn color={theme.success} size={18} />
+                      </View>
+                      <View>
+                        <Text style={[styles.ownAttendanceLabel, { color: theme.textSecondary }]}>Masuk</Text>
+                        <Text style={[styles.ownAttendanceValue, { color: theme.textPrimary }]}>
+                          {data.own_attendance.check_in_at
+                            ? formatTime(data.own_attendance.check_in_at)
+                            : '-'}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.ownAttendanceCell}>
+                      <View style={[styles.ownAttendanceIconBadge, { backgroundColor: `${theme.primary}1A` }]}>
+                        <LogOut color={theme.primary} size={18} />
+                      </View>
+                      <View>
+                        <Text style={[styles.ownAttendanceLabel, { color: theme.textSecondary }]}>Pulang</Text>
+                        <Text style={[styles.ownAttendanceValue, { color: theme.textPrimary }]}>
+                          {data.own_attendance.check_out_at
+                            ? formatTime(data.own_attendance.check_out_at)
+                            : '-'}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               ) : (
-                <View style={[styles.ownAttendance, CardShadow, { backgroundColor: theme.surface }]}>
+                <View
+                  style={[
+                    styles.ownAttendance,
+                    CardShadow,
+                    { backgroundColor: theme.surface, borderColor: theme.border },
+                  ]}>
                   <StatusBadge label="Belum Tercatat" tone="neutral" />
                 </View>
               )}
@@ -167,7 +213,7 @@ const styles = StyleSheet.create({
   },
   glow: {
     gap: Spacing.lg,
-    paddingBottom: Spacing.lg,
+    paddingBottom: Spacing.xl * 1.5,
     borderBottomLeftRadius: Radius.xl,
     borderBottomRightRadius: Radius.xl,
   },
@@ -208,11 +254,32 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   ownAttendance: {
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  ownAttendanceGrid: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
+  ownAttendanceCell: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.sm,
   },
-  ownAttendanceText: {
-    fontSize: 13,
+  ownAttendanceIconBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: Radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ownAttendanceLabel: {
+    fontSize: 12,
+  },
+  ownAttendanceValue: {
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

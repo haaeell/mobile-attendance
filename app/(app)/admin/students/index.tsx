@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Plus, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -55,9 +56,10 @@ export default function AdminStudentsListScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <AppButton title="+ Tambah Siswa" onPress={() => router.push('/(app)/admin/students/create')} />
+            <AppButton title="Tambah Siswa" icon={Plus} onPress={() => router.push('/(app)/admin/students/create')} />
 
             <AppInput
+              icon={Search}
               placeholder="Cari nama, NIS, atau NISN..."
               value={keyword}
               onChangeText={setKeyword}

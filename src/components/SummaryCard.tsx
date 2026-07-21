@@ -22,7 +22,7 @@ export function SummaryCard({ label, value, tone = 'primary', caption, icon: Ico
   const accentColor = theme[tone];
 
   return (
-    <View style={[styles.card, CardShadow, { backgroundColor: theme.surface }]}>
+    <View style={[styles.card, CardShadow, { backgroundColor: theme.surface, borderColor: theme.border }]}>
       {Icon ? (
         <View style={[styles.iconBadge, { backgroundColor: `${accentColor}1A` }]}>
           <Icon color={accentColor} size={20} />
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   card: {
     flexGrow: 1,
     flexBasis: 140,
+    borderWidth: 1,
     borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: Spacing.xs / 2,

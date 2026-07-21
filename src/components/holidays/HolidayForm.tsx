@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { CalendarOff, FileText, Save } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -90,6 +91,7 @@ export function HolidayForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Nama Hari Libur"
+            icon={CalendarOff}
             placeholder="Contoh: Libur Hari Raya"
             value={value}
             onChangeText={onChange}
@@ -148,6 +150,7 @@ export function HolidayForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         render={({ field: { value, onChange, onBlur } }) => (
           <AppInput
             label="Keterangan"
+            icon={FileText}
             placeholder="Keterangan (opsional)"
             value={value}
             onChangeText={onChange}
@@ -160,7 +163,7 @@ export function HolidayForm({ defaultValues, submitLabel, isSubmitting, onSubmit
         )}
       />
 
-      <AppButton title={submitLabel} onPress={submit} loading={isSubmitting} />
+      <AppButton title={submitLabel} icon={Save} onPress={submit} loading={isSubmitting} />
 
       <SelectModal
         visible={isAppliesToModalOpen}

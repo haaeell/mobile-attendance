@@ -16,9 +16,9 @@ export default function AdminBarcodesIndexScreen() {
           styles.card,
           { backgroundColor: theme.surface, borderColor: theme.border, opacity: pressed ? 0.7 : 1 },
         ]}>
-        <Text style={[styles.cardTitle, { color: theme.textPrimary }]}>Barcode Siswa</Text>
+        <Text style={[styles.cardTitle, { color: theme.textPrimary }]}>QR Code Siswa</Text>
         <Text style={[styles.cardSubtitle, { color: theme.textSecondary }]}>
-          Lihat, unduh, cetak massal, dan terbitkan ulang barcode siswa
+          Lihat, unduh, cetak massal, dan terbitkan ulang QR code siswa
         </Text>
       </Pressable>
 
@@ -28,9 +28,9 @@ export default function AdminBarcodesIndexScreen() {
           styles.card,
           { backgroundColor: theme.surface, borderColor: theme.border, opacity: pressed ? 0.7 : 1 },
         ]}>
-        <Text style={[styles.cardTitle, { color: theme.textPrimary }]}>Barcode Guru</Text>
+        <Text style={[styles.cardTitle, { color: theme.textPrimary }]}>QR Code Guru</Text>
         <Text style={[styles.cardSubtitle, { color: theme.textSecondary }]}>
-          Lihat, unduh, cetak massal, dan terbitkan ulang barcode guru
+          Lihat, unduh, cetak massal, dan terbitkan ulang QR code guru
         </Text>
       </Pressable>
     </View>

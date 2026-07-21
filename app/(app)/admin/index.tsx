@@ -5,8 +5,8 @@ import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 const MENU_ITEMS: { title: string; subtitle: string; href: Href }[] = [
-  { title: 'Siswa', subtitle: 'Kelola data siswa, kelas, dan barcode', href: '/(app)/admin/students' },
-  { title: 'Guru', subtitle: 'Kelola akun guru, status, dan barcode', href: '/(app)/admin/teachers' },
+  { title: 'Siswa', subtitle: 'Kelola data siswa, kelas, dan QR code', href: '/(app)/admin/students' },
+  { title: 'Guru', subtitle: 'Kelola akun guru, status, dan QR code', href: '/(app)/admin/teachers' },
   {
     title: 'Kelas',
     subtitle: 'Kelola data kelas dan penentuan wali kelas',
@@ -24,8 +24,8 @@ const MENU_ITEMS: { title: string; subtitle: string; href: Href }[] = [
   },
   { title: 'Hari Libur', subtitle: 'Kelola hari libur sekolah', href: '/(app)/admin/holidays' },
   {
-    title: 'Barcode',
-    subtitle: 'Lihat, unduh, cetak massal, dan terbitkan ulang barcode',
+    title: 'QR Code',
+    subtitle: 'Lihat, unduh, cetak massal, dan terbitkan ulang QR code',
     href: '/(app)/admin/barcodes',
   },
 ];
