@@ -1,20 +1,21 @@
 {
   "expo": {
-    "name": "attendance-mobile",
+    "name": "SMA Islam Andalusia",
     "slug": "attendance-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "attendancemobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/logo.png",
+      "bundleIdentifier": "com.andalusia.attendance"
     },
     "android": {
+      "package": "com.andalusia.attendance",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#02783F",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
@@ -37,7 +38,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Aplikasi memerlukan akses kamera untuk memindai barcode absensi."
+          "cameraPermission": "Aplikasi memerlukan akses kamera untuk memindai QR code absensi."
         }
       ],
       "@react-native-community/datetimepicker",
